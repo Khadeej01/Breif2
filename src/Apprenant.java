@@ -100,7 +100,6 @@ Application application = new Application();
 
         ap = new Apprenant(id,nom,prenom,email,notes,classe);
 Application application=new Application();
-        .add(ap);
         System.out.println("Apprenant ajouter avec succes");
         id = application.apprenants.size()+1;
             }
