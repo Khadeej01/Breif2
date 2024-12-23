@@ -1,179 +1,181 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Apprenant extends Personne{
-    private int id;
-private double notes;
-Classe classe;
-Application application = new Application();
-    public Apprenant(int id, String nom, String prenom, String email, double notes, Classe classes) {
+
+public class Apprenant extends Personne {
+    private Classe classe;
+    private ArrayList<Double> notes;
+    private Scanner scanner = new Scanner(System.in);
+
+
+    public Apprenant(int id, String nom, String prenom, String email, Classe classe, ArrayList<Double> notes) {
         super(id, nom, prenom, email);
-        this.notes = notes;
-        this.classe = classes;
-    }
-   public Apprenant(){
-       super();
-
-   }
-
-
-
-    public double getNotes() {
-        return notes;
-    }
-
-    public void setNotes(double notes) {
+        this.classe = classe;
         this.notes = notes;
     }
 
-    public Object getClasse() {
+
+    public Apprenant() {
+    }
+
+
+    public Classe getClasse() {
         return classe;
     }
 
-    public String setClasse(Classe classe) {
+
+    public void setClasse(Classe classe) {
         this.classe = classe;
-        return null;
     }
+
+
+    public ArrayList<Double> getNotes() {
+        return notes;
+    }
+
+
+    public void setNotes(ArrayList<Double> notes) {
+        this.notes = notes;
+    }
+
 
     @Override
     public String toString() {
-        return "Apprenant{" +
-                "classe=" + classe +
-                ", notes=" + notes +
-                "} " + super.toString();
+        return super.toString() + ", Classe: " + (classe != null ? classe.getNom() : "Aucune") + ", Notes: " + notes;
     }
-    public void gestionApprenants(ArrayList<Apprenant> apprenants) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("1-Ajouter votre apprenant:");
-        System.out.println("2-Modifier votre apprenant:");
-        System.out.println("3-Supprimer votre apprenant:");
-        System.out.println("4-Afficher votre apprenant:");
 
-        int choice;
-        System.out.println("Veullez saisir le choix:");
-        choice = sc.nextInt();
-        Apprenant apprenant = new Apprenant();
-        switch (choice) {
+
+    public void gestionApprenants(ArrayList<Apprenant> apprenants, ArrayList<Classe> classes) {
+        System.out.println("\n--- Gestion des Apprenants ---");
+        System.out.println("1. Ajouter un apprenant");
+        System.out.println("2. Modifier un apprenant");
+        System.out.println("3. Supprimer un apprenant");
+        System.out.println("4. Afficher les apprenants");
+        System.out.print("Choix: ");
+        int choix = scanner.nextInt();
+        scanner.nextLine();
+
+
+        switch (choix) {
             case 1:
-
-                apprenant.AjouterApprenant();
+                ajouterApprenant(apprenants, classes);
                 break;
-                case 2:
-
-                    apprenant.AfficherApprenant();
-                    break;
+            case 2:
+                modifierApprenant(apprenants, classes);
+                break;
             case 3:
-                apprenant.ModifierApprenant();
+                supprimerApprenant(apprenants);
                 break;
-                case 4:
-                    apprenant.SupprimerApprenant();
-                    break;
-                    default:
-                        System.out.println("Choix invalide !!");
+            case 4:
+                afficherApprenants(apprenants);
+                break;
+            default:
+                System.out.println("Choix invalide !");
         }
     }
 
-    // Ajout d'Apprenant
-    public  void AjouterApprenant() {
-        Scanner sc = new Scanner(System.in);
+
+    public void ajouterApprenant(ArrayList<Apprenant> apprenants, ArrayList<Classe> classes) {
+        int id = apprenants.size() + 1;
+        System.out.print("Nom: ");
+        String nom = scanner.nextLine();
+        System.out.print("Prénom: ");
+        String prenom = scanner.nextLine();
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Entrez le nom de la classe: ");
+        String classenom = scanner.nextLine();
 
 
-        System.out.println("Veuillez saisir le nom :");
-        String nom = sc.nextLine();
-        System.out.println("Veuillez saisir le prenom :");
-        String prenom = sc.nextLine();
-        System.out.println("Veuillez saisir email (@gmail.com) :");
-        String email = sc.nextLine();
-        System.out.println("Veuillez saisir les notes :");
-        double notes = sc.nextDouble();
-        sc.nextLine();
-        System.out.println("Veuillez saisir classe :");
-        String classenom = sc.nextLine();
-        Apprenant ap=new Apprenant();
-        Classe c = new Classe();
-        Classe classe=c.rechercheClasse(classenom);
+        Classe classe = rechercherClasseParNom(classenom, classes);
         if (classe == null) {
-            System.out.println("Classe n'existe pas dans la classe " + classenom);
+            System.out.println("Classe introuvable !");
             return;
         }
 
 
-        ap = new Apprenant(id,nom,prenom,email,notes,classe);
-Application application=new Application();
-        System.out.println("Apprenant ajouter avec succes");
-        id = application.apprenants.size()+1;
+        ArrayList<Double> notes = new ArrayList<>();
+        System.out.println("Entrez les notes (séparées par des espaces) : ");
+        String[] notesInput = scanner.nextLine().split(" ");
+        try {
+            for (String note : notesInput) {
+                notes.add(Double.parseDouble(note));
             }
-            // Modifier Apprenant
-
-                public  void ModifierApprenant() {
-                    Scanner sc = new Scanner(System.in);
-
-                    System.out.print("Entrez l'ID de l'apprenant à modifier : ");
-                    int idRecherche = sc.nextInt();
-                    sc.nextLine();
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur : Veuillez entrer des notes valides.");
+            return;
+        }
 
 
-                    Apprenant apprenant = rechercherApprenantParID(idRecherche);
-                    if (apprenant == null) {
-                        System.out.println("Apprenant introuvable.");
-                        return;
-                    }
+        apprenants.add(new Apprenant(id, nom, prenom, email, classe, notes));
+        System.out.println("Apprenant ajouté !");
+    }
 
 
-                    System.out.print("Nouveau nom : ");
-                    String nom = sc.nextLine();
-                    apprenant.setNom(nom);
-                    System.out.print("Nouveau prénom : ");
-                    String prenom = sc.nextLine();
-                    apprenant.setPrenom(prenom);
-                    System.out.print("Nouvel email : ");
-                    String email = sc.nextLine();
-                    apprenant.setEmail(email);
-                    System.out.print("Nouvelle notes : ");
-                    double notes = sc.nextDouble();
-                    apprenant.setNotes(notes);
-                    sc.nextLine();
-                    System.out.print("Nouvelle classe : ");
-                    String classenom = sc.nextLine();
-                    Apprenant ap=new Apprenant();
-                    Classe classe=new Classe(classenom,null);
-                   ap.setNom(ap.setClasse(classe));
-                    ap = new Apprenant(id,nom,prenom,email,notes,classe);
+    public void modifierApprenant(ArrayList<Apprenant> apprenants, ArrayList<Classe> classes) {
+        System.out.print("ID de l'apprenant à modifier: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
 
 
-                    System.out.println("Apprenant modifié avec succès !");
+        for (Apprenant apprenant : apprenants) {
+            if (apprenant.getId() == id) {
+                System.out.print("Nouveau Nom: ");
+                apprenant.setNom(scanner.nextLine());
+                System.out.print("Nouveau Prénom: ");
+                apprenant.setPrenom(scanner.nextLine());
+                System.out.print("Nouvel Email: ");
+                apprenant.setEmail(scanner.nextLine());
+                System.out.print("Nouvelle Classe: ");
+                String classenom = scanner.nextLine();
+
+
+                Classe classe = rechercherClasseParNom(classenom, classes);
+                if (classe == null) {
+                    System.out.println("Classe introuvable !");
+                    return;
                 }
+                apprenant.setClasse(classe);
+                System.out.println("Apprenant modifié !");
+                return;
+            }
+        }
+        System.out.println("Apprenant introuvable !");
+    }
 
 
-    public  Apprenant rechercherApprenantParID(int id) {
-        for (Apprenant a : application.apprenants) {
-            if (a.getId() == id) return a;
+    public void supprimerApprenant(ArrayList<Apprenant> apprenants) {
+        System.out.print("ID de l'apprenant à supprimer: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+
+        if (apprenants.removeIf(apprenant -> apprenant.getId() == id)) {
+            System.out.println("Apprenant supprimé !");
+        } else {
+            System.out.println("Apprenant introuvable !");
+        }
+    }
+
+
+    public void afficherApprenants(ArrayList<Apprenant> apprenants) {
+        if (apprenants.isEmpty()) {
+            System.out.println("Aucun apprenant trouvé.");
+        } else {
+            for (Apprenant apprenant : apprenants) {
+                System.out.println(apprenant);
+            }
+        }
+    }
+
+
+    public Classe rechercherClasseParNom(String nom, ArrayList<Classe> classes) {
+        for (Classe classe : classes) {
+            if (classe.getNom().equalsIgnoreCase(nom)) {
+                return classe;
+            }
         }
         return null;
     }
-    //Supression d'appronant
-    private  void SupprimerApprenant() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("ID de l'apprenant à supprimer: ");
-        int id = sc.nextInt();
-       sc.nextLine();
-
-
-        System.out.println("Apprenant supprimé !");
-    }
-
-    // Afficher
-            public  void AfficherApprenant() {
-                if (apprenants.isEmpty()) {
-                    System.out.println("Aucun apprenant enregistré.");
-                } else {
-                    for (Apprenant apprenant : apprenants) {
-                        System.out.println(apprenant.toString());
-                    }
-                }
-            }
-
-
-        }
+}
 
