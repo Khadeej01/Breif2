@@ -1,11 +1,20 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
+
 public class Classe {
     private String nom;
     Formateur formateur;
 
+
+
+
     Scanner sc = new Scanner(System.in);
+
+
+
 
     public Classe(String nom, Formateur formateur) {
         this.nom = nom;
@@ -13,52 +22,92 @@ public class Classe {
     }
     public Classe(){
 
+
+
+
     }
     public Classe( String nom){
         this.nom = nom;
 
+
+
+
     }
+
+
+
 
     public String getNom() {
         return nom;
     }
 
+
+
+
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+
+
+
     public Formateur getFormateur() {
         return formateur;
     }
+
+
+
 
     public void setFormateur(Formateur formateur) {
         this.formateur = formateur;
     }
 
 
-    public void  GestionClasse(ArrayList<Classe> classes) {
+
+
+
+
+
+
+    public void  GestionClasse(ArrayList<Classe> classe) {
+
+
+
 
         System.out.println("----Menu Classe----");
         System.out.println("1. Ajouter une classe");
         System.out.println("2. Modifier une classe");
         System.out.println("3. Supprimer une  classe");
         System.out.println("4. Afficher les classes");
+        System.out.println("5.Quitter");
         System.out.println("Veuillez saisir votre choix : ");
         int choix = sc.nextInt();
         Classe c = new Classe();
         switch (choix) {
             case 1:
 
-                c.AjouterClasse(classes);
+
+
+
+                c.AjouterClasse(classe);
                 break;
             case 2 :
-                c.ModifierClasse(classes);
+                c.ModifierClasse(classe);
                 break;
             case 3 :
-                c.SupprimerClasse(classes);
+                c.SupprimerClasse(classe);
                 break;
-            case 4 : c.AfficherClasses(classes);
+            case 4 : c.AfficherClasses(classe);
                 break;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -67,14 +116,30 @@ public class Classe {
         }
     }
 
-    public Classe AjouterClasse() {
+
+
+
+    public void AjouterClasse(ArrayList<Classe> classe) {
         System.out.println("entrer nom du classe");
         String nomclasse = sc.nextLine();
-        System.out.println("Classe crrer avec succes");
-       return new Classe(nomclasse, null);
-//        for (Classe classe : application.classes) {
-//            System.out.println(classe.getNom());
-//        }
+        Classe c = new Classe(nomclasse,null);
+        classe.add(c);
+        System.out.println("classe ajouter avec succes ! ");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -82,29 +147,34 @@ public class Classe {
 
     }
     //MOdifier
-    private  void ModifierClasse() {
+    private  void ModifierClasse(ArrayList<Classe> classes) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("nom de la classe modifeir:  ");
-        String nomclasse = sc.nextLine();
-        sc.nextLine();
-
 
         for (Classe classe : classes) {
-            if (classe.getNom().equals(nomclasse)) {
+
                 System.out.print("Nouveau Nom: ");
                 classe.setNom(sc.nextLine());
                 System.out.println("Classe modifiée !");
                 return;
-            }
+
         }
-        System.out.println("Classe introuvable !");
+
     }
 
-    private  void SupprimerClasse() {
+
+
+
+    private  void SupprimerClasse(ArrayList<Classe> classes) {
         Scanner sc = new Scanner(System.in);
         System.out.print("nom de la classe a supprimer:  ");
         String nomclasse = sc.nextLine();
         sc.nextLine();
+
+
+
+
+
+
 
 
 //        classes.removeIf(classe -> classe.getNom().equals(nomclasse));
@@ -116,19 +186,33 @@ public class Classe {
     }
 
 
-    public void AfficherClasses() {
+
+
+
+
+
+
+    public void AfficherClasses(ArrayList<Classe> classes) {
         for (Classe classe : classes) {
             System.out.println(classe.getNom());
         }
     }
-    public Classe rechercheClasse(String nom) {
+    public Classe rechercheClasse(String nom,ArrayList<Classe> classes) {
         for (Classe c : classes ) {
             if (c.getNom().equals(nom)) return c;
+
+
+
 
         }
         return null;
     }
 
 
-}
 
+
+
+
+
+
+}
